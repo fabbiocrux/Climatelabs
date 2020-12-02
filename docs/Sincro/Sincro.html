@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sincro Strategy for ClimateLabs</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="ERPI" />
+    <script src="libs/header-attrs-2.5.3/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Sincro Strategy for ClimateLabs
+## Fabio Cruz
+### ERPI
+### UL
+### 2020/11/06 (updated: 2020-12-02)
+
+---
+
+
+
+
+<style type="text/css">/***********
+ Slide margins and spacings
+ ***********/
+.remark-slide-content {
+  padding-top: 25px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 25px;
+}
+/* 
+To specify the margin of the first title h1
+*/
+.remark-slide-content > h1:first-of-type {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #0148A4;
+}
+.remark-slide-content > h2:first-of-type {
+  color: #e64626;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.remark-slide-content > h3:first-of-type {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.remark-slide-content > h4:first-of-type {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+
+/*************************
+  Custom classes 
+**************************/
+
+.pull-left-2 {
+  float: left;
+  width: 60%;
+}
+.pull-right-1 {
+  float: right;
+  width: 36%;
+}
+
+.pull-left-1 {
+  float: left;
+  width: 36%;
+}
+.pull-right-2 {
+  float: right;
+  width: 60%;
+}
+
+
+/* use to position text at the bottom */
+.pull-down {
+  position: absolute;
+  bottom: 50px;
+}
+
+/* Change default inverse background colour */
+.inverse {
+  background-color: #0148A4;
+  text-shadow: 0 0 20px #333;
+}
+
+.inverse .remark-slide-number {
+  display: none;
+}
+/* background colour classes */
+.sydney-blue {
+  background-color: #0148A4;
+  color: white;
+}
+.sydney-yellow {
+  background-color: #FFB800;
+}
+.sydney-red {
+  background-color: #e64626;
+  color: white;
+}
+/* segue */
+.segue {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #0148A4;
+  color: #ffffff;
+  text-shadow: 0 0 20px #333;
+}
+.segue .remark-slide-number {
+  display: none;
+}
+
+.segue-red {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #e64626;
+  color: #ffffff;
+  text-shadow: 0 0 20px #333;
+}
+.segue-red .remark-slide-number {
+  display: none;
+}
+
+.segue-yellow {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #FFB800;
+  color: #424242;
+  text-shadow: 0 0 2px #333;
+}
+.segue-yellow .remark-slide-number {
+  display: none;
+}
+
+/* example slide with background colour to distinguish
+it from other content slides */
+.eg {
+  background-color: #F1F1F1;
+  /* rgb(231, 238, 242); */
+}
+.eg.nobackground {
+  background-color:white;
+}
+
+/* link colour */
+a { 
+    color: #0148A4; 
+} 
+
+.columns-2 {
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  columns: 2;
+  -webkit-column-gap: 1em;
+  -moz-column-gap: 1em;
+  column-gap: 1em;
+}
+
+.columns-21 {
+  -webkit-columns: 66%, 33%;
+  -moz-columns: 66%, 33%;
+  columns: 66%, 33%;
+  -webkit-column-gap: 1em;
+  -moz-column-gap: 1em;
+  column-gap: 1em;
+}
+
+
+
+/******************
+ * Slide scrolling
+ * (non-functional)
+ * not sure if it is a good idea anyway
+slides > slide {
+  overflow: scroll;
+ padding: 5px 40px;
+}
+.scrollable-slide .remark-slide {
+  height: 400px;
+  overflow: scroll !important;
+}
+ ******************/
+
+.scroll-box-8 {
+  height:8em;
+  overflow-y: scroll;
+}
+.scroll-box-10 {
+  height:10em;
+  overflow-y: scroll;
+}
+.scroll-box-12 {
+  height:12em;
+  overflow-y: scroll;
+}
+.scroll-box-14 {
+  height:14em;
+  overflow-y: scroll;
+}
+.scroll-box-16 {
+  height:16em;
+  overflow-y: scroll;
+}
+.scroll-box-18 {
+  height:18em;
+  overflow-y: scroll;
+}
+.scroll-box-20 {
+  height:20em;
+  overflow-y: scroll;
+}
+.scroll-output {
+  height: 90%;
+  overflow-y: scroll;
+}
+
+
+
+ 
+ /* inline code background */
+ .remark-inline-code {
+   /* until the link between code and mathjax 
+   is broken, we need to use transparent */
+  background: transparent; /* #F5F5F5; /* lighter */
+  /* background: #e7e8e2; /* darker */
+  border-radius: 3px;
+  padding: 2px;
+}
+
+
+
+/******************
+ * Coloured content boxes
+ ****************/
+.content-box { 
+    box-sizing: border-box;
+    background-color: #e2e2e2;
+}
+.content-box-blue,
+.content-box-gray,
+.content-box-grey,
+.content-box-army,
+.content-box-green,
+.content-box-purple,
+.content-box-red,
+.content-box-yellow {
+  box-sizing: border-box;
+  border-radius: 15px;
+  margin: 0 0 15px;
+  overflow: hidden;
+  padding: 0px 20px 0px 20px;
+  width: 100%;
+}
+.content-box-blue { background-color: #F0F8FF; }
+.content-box-gray { background-color: #e2e2e2; }
+.content-box-grey {	background-color: #F5F5F5; }
+.content-box-army {	background-color: #737a36; }
+.content-box-green { background-color: #d9edc2; }
+.content-box-purple { background-color: #e2e2f9; }
+.content-box-red { background-color: #ffcccc; }
+.content-box-yellow { background-color: #fef5c4; }
+.content-box-blue .remark-inline-code,
+.content-box-blue .remark-inline-code,
+.content-box-gray .remark-inline-code,
+.content-box-grey .remark-inline-code,
+.content-box-army .remark-inline-code,
+.content-box-green .remark-inline-code,
+.content-box-purple .remark-inline-code,
+.content-box-red .remark-inline-code,
+.content-box-yellow .remark-inline-code { 
+  background: none;
+}
+
+.full-width {
+    display: flex;
+    width: 100%;
+    flex: 1 1 auto;
+}
+
+
+
+/***********
+ Changed CSS
+ **************/
+
+.opacity{ opacity: 0.5; }
+.blur {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+}
+.grayscale img {
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
+}
+
+/**************
+ * Fancy stuff
+ **************/
+.rotate-left {
+    -webkit-transform: rotate(-2deg);
+    -moz-transform: rotate(-2deg);
+    transform: rotate(-2deg); 
+}
+.rotate-right {
+    -webkit-transform: rotate(2deg);
+    -moz-transform: rotate(2deg);
+    transform: rotate(2deg);     
+}
+/********** 
+ * Image stuff
+ ************/
+.polaroid img {
+    border: 10px solid #fff;
+    border-bottom: 45px solid #fff;
+    -webkit-box-shadow: 3px 3px 3px #111;
+    -moz-box-shadow: 3px 3px 3px #111;
+    box-shadow: 3px 3px 3px #111;
+}
+.shadow {
+    -moz-border-radius: 5px;
+    -moz-box-shadow: 5px 5px 5px #aaa;
+    -webkit-box-shadow: 5px 5px 5px #aaa;
+    box-shadow: 5px 5px 5px #aaa;
+    border-radius: 2px;  
+}
+
+
+/* disable background colour when printing */
+
+@page { margin: 0; }
+@media print {
+  .inverse, .segue, .segue-yellow, .segue-red, .sydney-blue,
+  .sydney-yellow, .sydney-red {
+    background-color: transparent;
+    color: black;
+    text-shadow: none;
+  }
+  .inverse h1, .inverse h2, .inverse h3, .inverse h4, .inverse h5, .segue {
+    background-color: transparent;
+    color: black;
+    text-shadow: none;
+  }
+  .eg {
+    background-color: transparent;
+  }
+  .remark-slide-scaler {
+    width: 100% !important;
+    height: 100% !important;
+    transform: scale(1) !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+}
+
+
+
+/*~~~~~~~~~~~~~~~~*/
+/* USYD additions */
+/*~~~~~~~~~~~~~~~~*/
+
+/* Title slide */
+/* Add image and change bg color
+.title-slide {
+  background-image: url(USydLogo-black.svg), url("title-image.jpg");
+  /* background-image: url(https://sydney.edu.au/etc/designs/corporate-commons/bower_components/corporate-frontend/dist/assets/img/USydLogo.svg); */
+  /*
+  background-position: 10% 90%, 100% 50%;
+  background-size: 160px, 50% 100%;
+  background-color: #e64626;
+  /*padding-left: 100px;   delete this for 4:3 aspect ratio */
+/*
+}
+*/
+ 
+.title-slide {
+  background-image: url(figures/logo.png);
+  background-position: 10% 90%;
+  background-size: 250px;
+  background-color: #FAFAFA;
+  text-align:left;
+  vertical-align: top;
+  text-shadow: none;
+  /*text-shadow: 0 0 5px #333;*/
+  /*padding-left: 100px;   delete this for 4:3 aspect ratio */
+}
+
+/* From Metropolis  */
+.title-slide {
+  background-color: #FAFAFA;
+  border-top: 80px solid #FAFAFA;
+}
+
+hr, .title-slide h2::after, .mline h1::after {
+  content: '';
+  display: block;
+  border: none;
+  background-color: #EB811B;
+  color: #EB811B;
+  height: 2px;
+}
+
+
+/* H1 fonts  */
+.title-slide h1 {
+  color: #0148A4; /* #1A292C; */
+  font-weight: normal;
+  font-size: 45px;
+  padding: 20px;
+  text-align: left;
+  vertical-align: middle;
+  margin-bottom: 18px;
+}
+
+/* H2 fonts */
+.title-slide h2 {
+  color: black !important; /* first of type is master brand red */
+  font-size: 35px;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  margin-top: 0px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* H3 fonts */
+.title-slide h3 {
+  font-size: 28px;
+  font-weight: normal;
+  color: black;
+  padding-left: 20px;
+  margin: 0px;
+  line-height: 1;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* Remove slide count */
+.title-slide .remark-slide-number {
+  display: none;
+}
+
+/* USYD blockquote */
+blockquote, .blockquote {
+  display: block;
+  margin-top: 0.1em;
+  margin-bottom: 0.2em;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-left: solid 10px #0148A4;
+  border-top: solid 2px #0148A4;
+  border-bottom: solid 2px #0148A4;
+  border-right: solid 2px #0148A4;
+  box-shadow: 0 0 6px rgba(0,0,0,0.5);
+  /* background-color: #e64626; */
+  color: #e64626;
+  padding: 0.5em;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+.blockquote p {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h1:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h2:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h3:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h4:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.text-shadow {
+  text-shadow: 0 0 4px #424242;
+}
+
+/* if wanted to change mathjax formatting
+.remark-inline-code .mjx-chtml {
+  color: blue;
+}
+*/
+
+/* References: many customisations adapted from the examples here:
+https://github.com/yihui/xaringan/tree/master/inst/rmarkdown/templates/xaringan/resources
+*/
+
+
+
+/* 
+Masterbrand charcoal #424242; 
+C=0 M=0 Y=0 K=90 
+R=66 G=66 B=66 
+
+Masterbrand red #e64626;
+C=0 M=0 Y=0 K=90
+R=66 G=66 B=66 
+
+Masterbrand white #ffffff;
+C=0 M=0 Y=0 K=0
+R=255 G=255 B=255
+
+Masterbrand black #000000;
+C=0 M=0 Y=0 K=100
+R=10 G=10 B=10
+
+Accent yellow #FFB800
+C=0 M=25 Y=98 K=0
+R=255 G=184 B=0 
+
+Accent blue #0148A4
+C=100 M=61 Y=0 K=0
+R=1 G=72 B=164 
+
+Accent grey - supportive #F1F1F1
+C=0 M=0 Y=0 K=10
+R=241 G=241 B=241 
+*/</style><style type="text/css">/* mostly as per defaults 
+https://github.com/yihui/xaringan/blob/master/inst/rmarkdown/templates/xaringan/resources/default-fonts.css
+but the major change is bringing Roboto front and centre
+*/
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed);
+/* 
+I'm in two minds as to whether to default to Roberto Mono or stick with 
+Source Code Pro (internet says Source Code Pro is better)
+https://www.slant.co/versus/224/287/~source-code-pro_vs_roboto-mono
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono);
+*/ 
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+
+body { 
+  font-family: 'Roboto', Arial, sans-serif;
+}
+h1, h2, h3 {
+  font-family: 'Roboto Condensed';
+  font-weight: normal;
+}
+
+.remark-code, .remark-inline-code { 
+  font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace; 
+  font-size: 95%;
+}
+
+.hljs-github .hljs {
+  overflow-y: auto;
+}
+
+.remark-code-line {
+  font-size: 80%;
+}
+
+/* this is not ideal, but a response to the resising issues
+   discussed https://github.com/yihui/xaringan/issues/62 and
+   https://github.com/yihui/xaringan/issues/143  */
+.mjx-chtml{ font-size: 100% !important; }
+
+/* change the line spread for readability
+   and so that inline code highlighting 
+   doesn't cover text on the line above */
+.remark-slide-content { font-size:24px; }
+.remark-slide-content p, 
+.remark-slide-content li {
+  line-height: 1.4;
+  /*font-size: 1.1em;*/
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.footnote {
+  position: absolute;
+  bottom: 0;
+  padding-right: 8em; /* to avoid the page numbering */ 
+}
+/* footnote identifier use: .fn[1] */
+.fn {
+  vertical-align: super;
+  font-size: 60%;
+}
+.footnote {
+  font-size: 0.7em;
+}
+.remark-slide-content .footnote  p, 
+.remark-slide-content .footnote li {
+  font-size: 0.7em!important;
+}
+.footnote .remark-code, 
+.footnote .remark-inline-code{ font-size: 0.8em!important; }
+
+/* code higlighting */
+.remark-code-string-highlighted, 
+.remark-code-line-highlighted {
+    background-color: yellow;
+}
+
+
+.remark-slide-number{
+  font-size: 16px!important;
+  bottom: 8px;
+  right: 16px;
+}
+/************************
+ * Font size and colours
+ ************************/
+
+/*      LaTeX style       */
+.Large       , .Large .remark-code, .Large .remark-inline-code { font-size: 144%; }
+.large       , .large .remark-code, .large .remark-inline-code { font-size: 120%; }
+.small       , .small .remark-code, .small .remark-inline-code { font-size: 90%; }
+.footnotesize, .footnotesize .remark-code, .footnotesize .remark-inline-code { font-size: 80%; }
+.scriptsize  , .scriptsize .remark-code, .scriptsize .remark-inline-code { font-size: 70%; }
+.tiny        , .tiny .remark-code, .tiny .remark-inline-code { font-size: 60%; }
+
+/* or you can be more specific */
+.font10 , .code10 .remark-code, .code10 .remark-inline-code{ font-size: 10%; }
+.font20 , .code20 .remark-code, .code20 .remark-inline-code{ font-size: 20%; }
+.font30 , .code30 .remark-code, .code30 .remark-inline-code{ font-size: 30%; }
+.font40 , .code40 .remark-code, .code40 .remark-inline-code{ font-size: 40%; }
+.font50 , .code50 .remark-code, .code50 .remark-inline-code{ font-size: 50%; }
+.font60 , .code60 .remark-code, .code60 .remark-inline-code{ font-size: 60%; }
+.font70 , .code70 .remark-code, .code70 .remark-inline-code{ font-size: 70%; }
+.font75 , .code75 .remark-code, .code75 .remark-inline-code{ font-size: 75%; }
+.font80 , .code80 .remark-code, .code80 .remark-inline-code{ font-size: 80%; }
+.font90 , .code90 .remark-code, .code90 .remark-inline-code{ font-size: 90%; }
+.font100, .code100 .remark-code, .code100 .remark-inline-code{ font-size: 100%; }
+.font110, .code110 .remark-code, .code110 .remark-inline-code{ font-size: 110%; }
+.font120, .code120 .remark-code, .code120 .remark-inline-code{ font-size: 120%; }
+.font130, .code130 .remark-code, .code130 .remark-inline-code{ font-size: 130%; }
+.font140, .code140 .remark-code, .code140 .remark-inline-code{ font-size: 140%; }
+.font150, .code150 .remark-code, .code150 .remark-inline-code{ font-size: 150%; }
+.font160, .code160 .remark-code, .code160 .remark-inline-code{ font-size: 160%; }
+.font170, .code170 .remark-code, .code170 .remark-inline-code{ font-size: 170%; }
+.font175, .code175 .remark-code, .code175 .remark-inline-code{ font-size: 175%; }
+.font180, .code180 .remark-code, .code180 .remark-inline-code{ font-size: 180%; }
+.font190, .code190 .remark-code, .code190 .remark-inline-code{ font-size: 190%; }
+.font200, .code200 .remark-code, .code200 .remark-inline-code{ font-size: 200%; }
+
+.brand-red { color: #e64626; }
+.brand-blue { color: #0148A4; }
+.brand-yellow { color: #FFB800; }
+.brand-charcoal {color: #424242; }
+.brand-gray {color: #F1F1F1;}
+.brand-grey {color: #F1F1F1;}
+.black { color: black; }
+.white { color: white; }
+.red { color: red; }
+.blue { color: blue; }
+.green { color: green; }
+.yellow { color: yellow; }
+.orange { color: orange; }
+.purple { color: purple; }
+.gray { color: gray; }
+.grey { color: gray; }
+
+.bold { font-weight: bold; }
+.bolder { font-weight: bolder; }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+# Objectif:
+
+&gt; Cette présentation fait un anlayse du Sinchro pour le Projet Climatelabs
+
+
+---
+
+# Gantt Original de Climatelabs
+
+![](Planning/planning.pdf)&lt;!-- --&gt;
+
+![Image Title](Planning/planning.jpg)
+
+
+---
+
+# Budget Initial
+
+
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; WP &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Role &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Coût de chaque Rôle&lt;br&gt;(Euros/Jour) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Jours&lt;br&gt;(G.A.) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Jours&lt;br&gt;(Equivalent EC) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Gannt&lt;br&gt;(Mois per WP) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="4"&gt; Preparation &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manager &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 280 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 214 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.67 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 162 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.50 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;border-bottom: 1px solid"&gt; Administratif &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 131 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="4"&gt; Development &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manager &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 280 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.67 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 214 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.22 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 162 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 35 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.89 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;border-bottom: 1px solid"&gt; Administratif &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 131 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="4"&gt; Quality Plan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manager &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 280 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.06 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 214 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.14 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 162 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;border-bottom: 1px solid"&gt; Administratif &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 131 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="4"&gt; Dissemination
+exploitation &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manager &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 280 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.03 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 214 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.53 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 162 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.06 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;border-bottom: 1px solid"&gt; Administratif &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 131 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;border-bottom: 1px solid"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="4"&gt; Management &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manager &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 280 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.06 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 214 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.22 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 162 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.28 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;"&gt; Administratif &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 131 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.28 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+---
+
+# UL Sinchro: Janvier 2020 - Dec 02 2020
+
+&lt;table class="table" style="font-size: 9px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; WP &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Task &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Role &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; LAURENT &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; MAURICIO &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; FABIO ALBERTO &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; LAURE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; CLAUDINE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; FERNEY &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="6"&gt; Preparation &lt;/td&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP 1.1 : Changemaker &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.75 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP1.2 : Kick-­?Off &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.75 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP1.3 : External &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="6"&gt; Development &lt;/td&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP2.1: Social &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP2.2 : Design and Development &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP2.4 : Applied Research Pilot &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Quality Plan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; WP3 : Quality monitoring and E &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="8"&gt; Dissemination
+exploitation &lt;/td&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP4.1 : Dissemination plan def &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP4.2 : Latin American Applied &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP4.3 : Outreach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="2"&gt; WP4.4 : Design and Content Edi &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="3"&gt; Management &lt;/td&gt;
+   &lt;td style="text-align:left;vertical-align: middle !important;" rowspan="3"&gt; WP5 : Management and coordinat &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   
+   
+   &lt;td style="text-align:left;"&gt; Administratif &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+
+
+
+
+# Sinchro UL - ClimateLabs
+
+&lt;table class="table" style="font-size: 15px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; WP &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Role &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Jours&lt;br&gt;(Grant&lt;br&gt;Agreement) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Sincro&lt;br&gt;Déclarés &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Jours&lt;br&gt; a Déclarer &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Finalization&lt;br&gt;WP &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Preparation &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 44.75 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: red !important;"&gt;-28.75&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Juillet 2O20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Preparation &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2.50 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;6.5&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Juillet 2O20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Development &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 47 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 14.00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;33&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Juillet 2021 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Development &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 35 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;28&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Juillet 2021 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Quality Plan &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1.50 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;3.5&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Fin Projet &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Dissemination
+exploitation &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 19 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.75 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;13.25&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Fin Projet &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Dissemination
+exploitation &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Fin Projet &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Management &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; EC/Enseignant &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;3.75&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Fin Projet &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Management &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Technicien &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;10&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Fin Projet &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Management &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Administratif &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2.00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;"&gt;8&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Fin Projet &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+Sinchro: Janvier 2020 - Dec 02 2020
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
