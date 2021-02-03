@@ -17,17 +17,16 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE}
+```{r setup, echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE)
 
 options(knitr.kable.NA = '-')
 
-require(tidyverse)
-require(readxl)
-require(reshape2)
-#require(kable)
-require(kableExtra)
-
+library(tidyverse)
+library(readxl)
+library(reshape2)
+library(kableExtra)
+library(here)
 
 ```
 
@@ -115,18 +114,16 @@ rm(EC, Climatelabs.gantt)
 ```
 
 
-```{r}
+```{r data}
 
 # Reading Export Multicriteria  From Jan to Month
-#Climatelabs <- read_excel("Multicriteria.xlsx") # before
-#getwd()
-Climatelabs <- read_excel("Multicriteria-Dec.xlsx") 
+
+Climatelabs <- read_excel(here("Sinchro/Jan-2021.xlsx")) 
 Climatelabs = tibble(Climatelabs) %>% select(-Service, -Nom, -"Unité d'export")
 Climatelabs <- Climatelabs %>% pivot_longer(!Prénom) %>% set_names("Prenom", "WP", "Jours")
 
 #Filtering only EC et Technicien
 Climatelabs  <- Climatelabs %>% filter(str_detect(WP, 'EC/Enseignant|Technicien|administratif'))
-
 
 # Wider view
 Climatelabs <- Climatelabs %>% pivot_wider(id_cols = WP, names_from = Prenom, values_from = Jours)
@@ -139,8 +136,6 @@ Climatelabs <- Climatelabs %>% separate(WP, c("Project", "WP", "Task", "Role"),s
 Climatelabs$Role <- factor(Climatelabs$Role, levels = c("Manager", "EC/Enseignant", "Technicien", "administratif"))
 levels(Climatelabs$Role)[levels(Climatelabs$Role)=="administratif"] <- "Administratif"
 
-
-
 # ORdering factors
 Climatelabs$WP <- gsub('&', "\n", Climatelabs$WP)
 Climatelabs$WP <- factor(Climatelabs$WP, levels = c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"))
@@ -151,7 +146,7 @@ Climatelabs$WP <- factor(Climatelabs$WP, levels = c("Preparation", "Development"
 
 # Objectif:
 
-> Cette présentation fait un anlayse du Sinchro pour le Projet Climatelabs
+> Cette présentation fait un anlyse Globala Sinchro pour le Projet Climatelabs
 
 
 ---
