@@ -1,0 +1,107 @@
+---
+title: "Planning CLIP"
+#output: html_document
+classoption: landscape
+geometry: margin=0.2in, paperheight=12in, paperwidth=21in
+header-includes:
+  - \usepackage{pgfgantt}
+  - \usepackage{textcomp}
+  - \usepackage[dvipsnames]{xcolor}
+#bibliography: library.bib
+output: pdf_document
+#csl: ieee.csl
+link-citations: yes
+linkcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+ \ganttset{%
+        calendar week text={%
+            W\currentweek
+        }%
+    }
+
+
+\begin{ganttchart}[vgrid, hgrid, 
+   time slot format=isodate,
+   time slot unit=day, 
+   bar/.append style={fill=blue!50, rounded corners=3pt},
+	newline shortcut=true,
+	today={\the\year-\the\month-\the\day}, 
+	today offset= .3,
+	y unit chart=0.6cm,
+	x unit = 0.11cm,
+	bar label node/.append style={align=left},
+	milestone/.append style={fill=blue, rounded corners=1pt},
+	milestone label font=\color{blue} ]{2021-01-01}{2021-12-01}
+	\gantttitlecalendar{year, month=shortname, week=1} \\
+
+\ganttgroup[progress=5]{Preparation of CLIP}{2020-10-01}{2021-07-29} \\ 
+
+\ganttgroup{Fundamentals and principles}{2021-02-02}{2021-02-02} \\
+
+   \ganttbar[progress=100]{Introduction au sujet }{2020-10-01}{2020-10-15}\\
+   \ganttbar[progress=100]{First Tests (Electronical, Mechanical)}{2020-10-15}{2020-10-29}\\
+   \ganttbar[progress=100]{API Code - V1}{2020-10-15}{2020-10-29}\\
+   
+   \ganttmilestone[name=Mile1]{Definition of electronical and Initial python code}{2020-10-31}\\ 
+   
+
+   \ganttbar[bar/.append style={fill=Lavender}, progress=100]{LF AFTER Cours}{2020-11-01}{2020-11-29}\\
+
+
+   \ganttbar[progress=50]{Prototype V1}{2020-12-01}{2020-12-18}\\
+   
+   \ganttmilestone[name=Mile1]{Have 1 complete prototype}{2020-12-18} \ganttnewline
+   \ganttbar[progress=10]{Documentation of Prototype}{2021-02-28}{2021-04-28}\\
+
+\ganttgroup[progress=0]{Fabrication of 7 prototypes}{2021-01-01}{2021-02-28}   \\
+   \ganttmilestone[name=Mile1]{Have 7 complete Prototypes}{2021-02-28} \\
+   
+\ganttgroup[progress=0]{Deployment Rives de Meurthe}{2021-03-01}{2021-09-01}   \\
+   \ganttbar[progress=0]{Master IUVTT to Create the local Network?}{2021-03-01}{2021-05-29}\\
+
+\ganttgroup[progress=0]{Test Foire International?}{2021-05-30}{2021-07-29} \\
+
+   \ganttbar[progress=1]{Documentation Ind Eco., Actors mapping}{2021-05-01}{2021-09-01} \ganttnewline[thick, blue]  
+   
+   
+% GIGABOT
+\ganttgroup[progress=5]{Gigabot}{2020-10-01}{2021-07-29} \\ 
+\ganttgroup[progress=100]{Admin}{2020-11-01}{2020-12-19} \\ 
+   \ganttbar[name=T2, progress=100]{Admin documents in Teams}{2020-10-01}{2020-10-29}\\
+   \ganttbar[name=T2, progress=100]{Reception of the machine}{2020-11-16}{2020-11-19}\\
+   \ganttbar[name=T2, progress=50]{First trials with virgin}{2020-11-23}{2020-12-19}\\
+
+   % Decembre      
+   
+\ganttgroup[progress=5]{Validation of Gigabot with virgin material}{2020-12-01}{2021-02-28} \\
+   \ganttbar[name=T2, progress=40]{First improvements (Control)}{2020-12-03}{2020-12-18}\\
+   \ganttbar[name=T2, progress=0]{Testing with students AFTER}{2021-01-15}{2021-01-18}\\
+
+
+\ganttgroup[progress=0]{Validation of Gigabot with recycled PLA / HDPE}{2021-03-01}{2021-09-01} \\
+
+   \ganttbar[progress=0]{Master M2 intro to INEDIT / Gigabot }{2021-03-01}{2021-03-15}\\
+   \ganttbar[progress=0]{Literature on 3D Printing for furniture}{2021-03-15}{2021-03-30}\\
+   \ganttbar[progress=0]{DoE for Quality printing for Gigabot}{2021-04-01}{2021-04-30}\\
+
+
+
+
+   
+   
+   
+   %\ganttlink{T1.1}{T1.2}
+   %\ganttlink{T1.1}{T1.3}
+   %\ganttlink{T1.1}{T1.4}
+   %\ganttlink{T1.1}{T1.5}
+   %\ganttlink{T1.4}{Mile1}
+
+
+\end{ganttchart}
+
+Last Updated :  `r format(Sys.time(), '%d %B, %Y')`

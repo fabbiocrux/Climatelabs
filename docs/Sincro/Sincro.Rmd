@@ -6,46 +6,30 @@ institute: "UL"
 date: "2020/11/06 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: [default ]
+    css: [default, "assets/Fabio.css", "assets/Fabio-fonts.css"]
     lib_dir: libs
     nature:
       ratio: '16:9'
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-# output:      
-#   pdf_document:
-#     fig_caption: yes
-#   prettydoc::html_pretty:
-#     theme: architect
-#     highlight: github
-# header-includes:
-# fontsize: 12pt
-# classoption: a3paper 
 editor_options: 
   chunk_output_type: console
 ---
 
-```{r, echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE}
+```{r setup, echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE)
 
 options(knitr.kable.NA = '-')
 
-require(tidyverse)
-require(readxl)
-require(reshape2)
-#require(kable)
-require(kableExtra)
-
+library(tidyverse)
+library(readxl)
+library(reshape2)
+library(kableExtra)
+library(here)
 
 ```
 
-```{r, include=TRUE}
-
-htmltools::includeCSS("https://raw.githubusercontent.com/fabbiocrux/presentaciones/gh-pages/Assets-global/css/Fabio.css")
-
-htmltools::includeCSS("https://raw.githubusercontent.com/fabbiocrux/presentaciones/gh-pages/Assets-global/css/Fabio-fonts.css")
-```
 
 
 
@@ -130,17 +114,16 @@ rm(EC, Climatelabs.gantt)
 ```
 
 
-```{r}
+```{r data}
 
 # Reading Export Multicriteria  From Jan to Month
-#Climatelabs <- read_excel("Multicriteria.xlsx") # before
-Climatelabs <- read_excel("Multicriteria-Dec.xlsx") 
+
+Climatelabs <- read_excel(here("Sinchro/Jan-2021.xlsx")) 
 Climatelabs = tibble(Climatelabs) %>% select(-Service, -Nom, -"Unité d'export")
 Climatelabs <- Climatelabs %>% pivot_longer(!Prénom) %>% set_names("Prenom", "WP", "Jours")
 
 #Filtering only EC et Technicien
 Climatelabs  <- Climatelabs %>% filter(str_detect(WP, 'EC/Enseignant|Technicien|administratif'))
-
 
 # Wider view
 Climatelabs <- Climatelabs %>% pivot_wider(id_cols = WP, names_from = Prenom, values_from = Jours)
@@ -153,8 +136,6 @@ Climatelabs <- Climatelabs %>% separate(WP, c("Project", "WP", "Task", "Role"),s
 Climatelabs$Role <- factor(Climatelabs$Role, levels = c("Manager", "EC/Enseignant", "Technicien", "administratif"))
 levels(Climatelabs$Role)[levels(Climatelabs$Role)=="administratif"] <- "Administratif"
 
-
-
 # ORdering factors
 Climatelabs$WP <- gsub('&', "\n", Climatelabs$WP)
 Climatelabs$WP <- factor(Climatelabs$WP, levels = c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"))
@@ -165,18 +146,21 @@ Climatelabs$WP <- factor(Climatelabs$WP, levels = c("Preparation", "Development"
 
 # Objectif:
 
-> Cette présentation fait un anlayse du Sinchro pour le Projet Climatelabs
+> Cette présentation fait un anlyse Globala Sinchro pour le Projet Climatelabs
 
 
 ---
 
 # Gantt Original de Climatelabs
 
-```{r, include=TRUE}
-knitr::include_graphics("Planning/planning.pdf")
+
+```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
+library(magick)
+Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
+#image_scale(, "2000")
+Gannt
 ```
 
-![Image Title](Planning/planning.jpg)
 
 
 ---
@@ -187,7 +171,7 @@ knitr::include_graphics("Planning/planning.pdf")
 ```{r, include=TRUE}
 
 Climatelabs.original %>% select(WP, Role, Unit.cost, Jours.GA, Gantt, Sinchro) %>% 
-  set_names("WP", "Role", "Coût de chaque Rôle<br/>(Euros/Jour)", "Jours<br/>(G.A.)", "Jours<br/>(Equivalent EC)", "Gannt<br/>(Mois per WP)") %>% 
+  set_names("WP", "Role", "Coût de chaque Rôle<br/>(Euros/Jour)", "Jours<br/>(G.A.)", "Gannt<br/>(Mois per WP)", "Sincro Original<br/>(Jours / Mois)") %>% 
   kbl(booktabs = T, digits = 2, escape = F, ) %>% 
   kable_styling(latex_options = "striped", full_width = T, font_size = 12) %>% 
   row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid") %>% 
@@ -195,8 +179,6 @@ Climatelabs.original %>% select(WP, Role, Unit.cost, Jours.GA, Gantt, Sinchro) %
   
 
 ```
-
-
 
 
 ---
