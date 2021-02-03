@@ -153,11 +153,14 @@ Climatelabs$WP <- factor(Climatelabs$WP, levels = c("Preparation", "Development"
 
 # Gantt Original de Climatelabs
 
-```{r, include=TRUE}
-knitr::include_graphics("Planning/planning.pdf")
+
+```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
+library(magick)
+Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
+#image_scale(, "2000")
+Gannt
 ```
 
-![Image Title](Planning/planning.jpg)
 
 
 ---
