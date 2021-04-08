@@ -117,8 +117,9 @@ rm(EC, Climatelabs.gantt)
 ```{r data}
 
 # Reading Export Multicriteria  From Jan to Month
+#Climatelabs <- read_excel(here("Sinchro/Jan-2021.xlsx")) 
+Climatelabs <- read_excel(here("Sinchro/Avril-2021.xlsx")) 
 
-Climatelabs <- read_excel(here("Sinchro/Jan-2021.xlsx")) 
 Climatelabs = tibble(Climatelabs) %>% select(-Service, -Nom, -"Unité d'export")
 Climatelabs <- Climatelabs %>% pivot_longer(!Prénom) %>% set_names("Prenom", "WP", "Jours")
 
