@@ -6,7 +6,8 @@ institute: "UL"
 date: "2020/11/06 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: [default, "assets/Fabio.css", "assets/Fabio-fonts.css"]
+    css: [default, metropolis, metropolis-fonts]
+    #css: [default, "assets/Fabio.css", "assets/Fabio-fonts.css"]
     lib_dir: libs
     nature:
       ratio: '16:9'
@@ -18,128 +19,28 @@ editor_options:
 ---
 
 ```{r setup, echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE}
-knitr::opts_chunk$set(echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE,  
+                      include=TRUE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      fig.width = 8,
+                      fig.height = 5,
+                      fig.align = 'center',
+                      fig.retina = 3)
 
 options(knitr.kable.NA = '-')
-
 library(tidyverse)
 library(readxl)
 library(reshape2)
 library(kableExtra)
 library(here)
-
+library(xaringanBuilder)
 ```
 
 
-
-
-
-```{r Climatelabs.original}
-
-# Cost Erasmus+
-Manager =  280
-EC =  214
-Technicien  = 162
-Admin =131
-
-#Conversion factors
-Manager.2.EC =  Manager / EC
-Tech.2.EC = Technicien / EC
-Admin.2.EC = Admin / EC
-
-
-Cost =
-  tribble(~Role, ~Unit.cost, ~Factor.EC,
-         "Manager",   280, Manager.2.EC, 
-         "EC/Enseignant",   214, 1,
-         "Technicien",   162, Tech.2.EC,
-         "Administratif", 131 , Admin.2.EC
-        )
-
-rm(Manager.2.EC, Tech.2.EC , Admin.2.EC, Manager,  EC , Technicien , Admin)
-
-
-
-# Creating WPs
-Climatelabs.original <- 
-  tibble (
-   WP = rep(c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"), 4),
-   Role = rep(c("Manager", "EC/Enseignant", "Technicien", "Administratif"), 5)
-  ) 
-
-# ORdering factors
-Climatelabs.original$WP <- factor(Climatelabs.original$WP, levels = c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"))
-Climatelabs.original$Role <- factor(Climatelabs.original$Role, levels = c("Manager", "EC/Enseignant", "Technicien", "Administratif"))
-
-# Ordering
-Climatelabs.original <- Climatelabs.original %>%  arrange(WP, Role, by_group = TRUE)
-
-Jours_grant  <- 
-  c(
-    Preparation = c(0, 16, 9,0),
-    Development = c(6,47,35,0 ), 
-    "Quality Plan" = c(2,5,0,0 ), 
-    "Dissemination\nexploitation" = c(1, 19, 2, 0), 
-    Management = c(2, 8, 10, 10 ) 
-    ) 
-
-Climatelabs.original$Jours.GA =  Jours_grant
-
-# FUsioning the Cost Table
-Climatelabs.original <-  left_join(Climatelabs.original, Cost, by="Role")
-rm(Cost)
-
-# Transforming a jours E/C
-EC <- Climatelabs.original %>% rowwise() %>% mutate(Jours.EC = Jours.GA * Factor.EC)
-EC <- EC %>% group_by(WP) %>% summarise(Jours.GA.EC = sum(Jours.EC))
-EC$Role <- "EC/Enseignant"
-
-Climatelabs.original <-  left_join(Climatelabs.original, EC, by=c("WP", "Role"))
-
-
-# From Gant
-Climatelabs.gantt <-
-  tibble (
-   WP = c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"),
-   Gantt = c(6, 9, 36, 36, 36)
-  )
-
-Climatelabs.original <-  left_join(Climatelabs.original, Climatelabs.gantt, by=c("WP"))
-
-Climatelabs.original <- Climatelabs.original %>% mutate(Sinchro = round( Jours.GA / Gantt, 2)) 
-
-rm(EC, Climatelabs.gantt)
-
-
-```
-
-
-```{r data}
-
-# Reading Export Multicriteria  From Jan to Month
-
-Climatelabs <- read_excel(here("Sinchro/Jan-2021.xlsx")) 
-Climatelabs = tibble(Climatelabs) %>% select(-Service, -Nom, -"Unité d'export")
-Climatelabs <- Climatelabs %>% pivot_longer(!Prénom) %>% set_names("Prenom", "WP", "Jours")
-
-#Filtering only EC et Technicien
-Climatelabs  <- Climatelabs %>% filter(str_detect(WP, 'EC/Enseignant|Technicien|administratif'))
-
-# Wider view
-Climatelabs <- Climatelabs %>% pivot_wider(id_cols = WP, names_from = Prenom, values_from = Jours)
-
-# Split the columns
-Climatelabs <- Climatelabs %>% separate(WP, c("Project", "WP", "Task", "Role"),sep = " / ") %>% select(-Project)
-
-
-# Changing the levels
-Climatelabs$Role <- factor(Climatelabs$Role, levels = c("Manager", "EC/Enseignant", "Technicien", "administratif"))
-levels(Climatelabs$Role)[levels(Climatelabs$Role)=="administratif"] <- "Administratif"
-
-# ORdering factors
-Climatelabs$WP <- gsub('&', "\n", Climatelabs$WP)
-Climatelabs$WP <- factor(Climatelabs$WP, levels = c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"))
-
+```{r datos}
+source("R/Climatelabs_original.R")
+source("R/1-Data-sincro.R")
 ```
 
 
@@ -155,28 +56,27 @@ Climatelabs$WP <- factor(Climatelabs$WP, levels = c("Preparation", "Development"
 
 
 ```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
-library(magick)
-Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
+#library(magick)
+#Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
 #image_scale(, "2000")
-Gannt
+#Gannt
 ```
 
 
 
 ---
 
-# Budget Initial
+# Sincro Initial
 
+```{r,}
 
-```{r, include=TRUE}
-
-Climatelabs.original %>% select(WP, Role, Unit.cost, Jours.GA, Gantt, Sinchro) %>% 
-  set_names("WP", "Role", "Coût de chaque Rôle<br/>(Euros/Jour)", "Jours<br/>(G.A.)", "Gannt<br/>(Mois per WP)", "Sincro Original<br/>(Jours / Mois)") %>% 
-  kbl(booktabs = T, digits = 2, escape = F, ) %>% 
-  kable_styling(latex_options = "striped", full_width = T, font_size = 12) %>% 
-  row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid") %>% 
-  collapse_rows(columns = 1, valign = "middle") 
-  
+Climatelabs.original %>% 
+   select(WP, Role, Unit.cost, Jours.GA) %>% 
+   set_names("WP", "Role", "Coût de chaque Rôle<br/>(Euros/Jour)", "Jours<br/>(G.A.)") %>% 
+   kbl(booktabs = T, digits = 2, escape = F, ) %>% 
+   kable_styling(latex_options = "striped", full_width = T, font_size = 12) %>% 
+   row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid") %>% 
+   collapse_rows(columns = 1, valign = "middle") 
 
 ```
 
@@ -186,7 +86,7 @@ Climatelabs.original %>% select(WP, Role, Unit.cost, Jours.GA, Gantt, Sinchro) %
 # UL Sinchro: Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`
 
 ```{r, include=TRUE}
-Tabla.Sinchro <- Climatelabs
+Tabla.Sinchro <- Sincro
 Tabla.Sinchro[Tabla.Sinchro == 0] <- NA
 #Tabla.Sinchro %>% mutate_if(is.double, as.character) -> Tabla.Sinchro
 
@@ -200,51 +100,51 @@ Tabla.Sinchro %>%
 
 ---
 
-```{r}
-str(Climatelabs)
-
-Summary.climatelabs <-   
-  Climatelabs %>%  
-    rowwise() %>% mutate(Total = sum(c_across(LAURENT:FERNEY))) %>% 
-      select(WP, Role, Total) %>% group_by(WP, Role) %>% summarise(Total_jours = sum(Total)) 
-
-
-# Joinning 
-Summary.climatelabs <-  left_join(Summary.climatelabs, Climatelabs.original, by=c("WP", "Role"))
-# ORdering columns
-Summary.climatelabs <- Summary.climatelabs %>% select(WP, Role, Jours.GA, Total_jours)
-
-Summary.climatelabs <- Summary.climatelabs %>% mutate(To.declare = (Total_jours - Jours.GA)*(-1))
-
-# Adding date pour Sinchro
-
-gantt <-
-  tibble (
-   WP = c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"),
-   Gantt.Date.To.declare = c("Juillet 2O20", "Juillet 2021", "Fin Projet", "Fin Projet", "Fin Projet")
-  )
-
-Summary.climatelabs <-  left_join(Summary.climatelabs, gantt, by=c("WP"))
-
-rm(gantt)
-```
-
-
 # Sinchro UL - ClimateLabs
 
-```{r, include=TRUE}
+```{r}
+Sincro.UL <- Sincro %>% group_by(WP, Role) %>% summarise(Sincro.UL = sum(Total))
+# Joinning 
+Summary <- 
+   Climatelabs.original %>% left_join(Sincro.UL, by=c("WP", "Role")) %>% 
+   select(WP:Unit.cost, Sincro.UL)
 
-Summary.climatelabs$To.declare <-  
-  cell_spec(Summary.climatelabs$To.declare, color = "white",
-            background = ifelse(Summary.climatelabs$To.declare > 0, "green", "red"))
+Summary$WP <- 
+   factor(Summary$WP, 
+          levels = c("Preparation",
+                     "Development", 
+                     "Quality Plan",
+                     "Dissemination\nexploitation", 
+                     "Management"))
 
-Summary.climatelabs %>% select(WP, Role, Jours.GA,  Total_jours, To.declare, Gantt.Date.To.declare) %>% 
-  set_names("WP", "Role", "Jours<br/>(Grant<br/>Agreement)", "Sincro<br/>Déclarés", "Jours<br/> a Déclarer", "Finalization<br/>WP") %>% 
-  kbl(booktabs = T, digits = 2, escape = F, align = "c") %>% 
-  kable_styling(latex_options = "striped", full_width = T, font_size = 15)
-  
+
+Summary %>% 
+   kbl(booktabs = T) %>% 
+  kable_styling(latex_options = "striped", full_width = T, font_size = 9) %>% 
+  collapse_rows(columns = 1:2, valign = "middle") 
+
+
 
 ```
+
+---
+
+Graphique de Sincro:
+
+```{r, out.width='90%', fig.width=7, fig.height=3}
+
+Summary %>% select(-Unit.cost) %>% 
+   pivot_longer(cols = Jours.GA:Sincro.UL,
+                names_to = "Type") %>% 
+   ggplot(aes(x = WP, y = value, fill = Type))+
+   geom_bar( stat = "Identity", position="dodge") +
+   #scale_y_continuous(limits = c(0, 50))  +
+   coord_flip() +
+   facet_grid(. ~ Role, scales = "free_x")
+
+```
+
+
 
 
 Sinchro: Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`

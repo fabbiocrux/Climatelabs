@@ -1,5 +1,5 @@
 ---
-title: "Planning"
+title: "Planning ClimateLabs"
 classoption: landscape
 geometry: margin=1cm
 header-includes:
@@ -15,6 +15,9 @@ linkcolor: blue
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+(293850 * (1.15/100))*300
+
 ```
 
 
@@ -52,7 +55,7 @@ knitr::opts_chunk$set(echo = TRUE)
    \ganttbar[name=T2.5]{\textbf{WP2.2:}Design and Development of Online Incubation Labs Program}{2020-10}{2021-06}\\
    \ganttbar[name=T2.5]{\textbf{WP2.4:}Applied Research Pilot Projects}{2021-01}{2022-07}\\
 
-   \ganttbar[name=T2.5]{\textbf{WP2.3:}Implementation of CLimatelabs}{2021-05}{2022-10}\\
+   \ganttbar[name=T2.5]{\textbf{WP2.3:}Implementation of Climatelabs}{2021-05}{2021-10}\\
 
    \ganttbar[name=T2.5]{\textbf{WP4.2:}Conference in LOrraine}{2021-10}{2021-10}\\
 \ganttbar[name=T2.5]{Latin American Applied Research on CLimate Change Conference, MExico}{2022-11}{2022-11}\\
