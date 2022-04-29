@@ -13,12 +13,3 @@ require(xaringanExtra)
 ```
 
 
-
-# Sincro
-
-
-```{r embed-xaringan, echo=FALSE}
-
-embed_xaringan(url = "Sincro/Sincro.html", ratio = "16:9")
-
-```

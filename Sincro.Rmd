@@ -1,0 +1,150 @@
+---
+title: "Sincro Strategy for ClimateLabs"
+subtitle: "Fabio Cruz"
+author: "ERPI"
+institute: "UL"
+date: '`r Sys.Date()`)'
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    #css: [default, "assets/Fabio.css", "assets/Fabio-fonts.css"]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = FALSE,  
+                      include=TRUE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      fig.width = 8,
+                      fig.height = 5,
+                      fig.align = 'center',
+                      fig.retina = 3)
+
+options(knitr.kable.NA = '-')
+library(tidyverse)
+library(readxl)
+library(reshape2)
+library(kableExtra)
+library(here)
+library(xaringanBuilder)
+```
+
+
+```{r datos}
+source("R/Climatelabs_original.R")
+source("R/1-Data-sincro.R")
+```
+
+
+
+# Objectif:
+
+> Cette présentation fait un anlyse Globala Sinchro pour le Projet Climatelabs
+
+
+---
+
+# Gantt Original de Climatelabs
+
+
+```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
+#library(magick)
+#Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
+#image_scale(, "2000")
+#Gannt
+```
+
+
+
+---
+
+# Sincro Initial
+
+```{r,}
+
+Climatelabs.original %>% 
+   select(WP, Role, Unit.cost, Jours.GA) %>% 
+   set_names("WP", "Role", "Coût de chaque Rôle<br/>(Euros/Jour)", "Jours<br/>(G.A.)") %>% 
+   kbl(booktabs = T, digits = 2, escape = F, ) %>% 
+   kable_styling(latex_options = "striped", full_width = T, font_size = 12) %>% 
+   row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid") %>% 
+   collapse_rows(columns = 1, valign = "middle") 
+
+```
+
+
+---
+
+# UL Sinchro: Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`
+
+```{r, include=TRUE}
+Tabla.Sinchro <- Sincro
+Tabla.Sinchro[Tabla.Sinchro == 0] <- NA
+#Tabla.Sinchro %>% mutate_if(is.double, as.character) -> Tabla.Sinchro
+
+Tabla.Sinchro %>% 
+  kbl(booktabs = T) %>% 
+  kable_styling(latex_options = "striped", full_width = T, font_size = 9) %>% 
+  collapse_rows(columns = 1:2, valign = "middle") 
+
+```
+
+
+---
+
+# Sinchro UL - ClimateLabs
+
+```{r}
+Sincro.UL <- Sincro %>% group_by(WP, Role) %>% summarise(Sincro.UL = sum(Total))
+# Joinning 
+Summary <- 
+   Climatelabs.original %>% left_join(Sincro.UL, by=c("WP", "Role")) %>% 
+   select(WP:Unit.cost, Sincro.UL)
+
+Summary$WP <- 
+   factor(Summary$WP, 
+          levels = c("Preparation",
+                     "Development", 
+                     "Quality Plan",
+                     "Dissemination\nexploitation", 
+                     "Management"))
+
+
+Summary %>% 
+   kbl(booktabs = T) %>% 
+  kable_styling(latex_options = "striped", full_width = T, font_size = 9) %>% 
+  collapse_rows(columns = 1:2, valign = "middle") 
+
+
+
+```
+
+---
+
+Graphique de Sincro:
+
+```{r, out.width='90%', fig.width=7, fig.height=3}
+
+Summary %>% select(-Unit.cost) %>% 
+   pivot_longer(cols = Jours.GA:Sincro.UL,
+                names_to = "Type") %>% 
+   ggplot(aes(x = WP, y = value, fill = Type))+
+   geom_bar( stat = "Identity", position="dodge") +
+   #scale_y_continuous(limits = c(0, 50))  +
+   coord_flip() +
+   facet_grid(. ~ Role, scales = "free_x")
+
+```
+
+
+
+
+Sinchro: Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`
