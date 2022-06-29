@@ -14,9 +14,19 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      navigation:
+        scroll: false
 editor_options: 
   chunk_output_type: console
 ---
+
+<style>
+  .myTable td {
+    padding: 2px;
+  }
+</style>
+
+
 
 ```{r setup, echo = FALSE,  include=FALSE, warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = FALSE,  
@@ -56,29 +66,36 @@ source("R/1-Data-sincro.R")
 
 
 ```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
-#library(magick)
-#Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
+library(magick)
+Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
 #image_scale(, "2000")
-#Gannt
+Gannt
 ```
-
-
 
 ---
 
 # Sincro Initial
 
+.pull-left[
 ```{r,}
-
 Climatelabs.original %>% 
    select(WP, Role, Unit.cost, Jours.GA) %>% 
-   set_names("WP", "Role", "Coût de chaque Rôle<br/>(Euros/Jour)", "Jours<br/>(G.A.)") %>% 
-   kbl(booktabs = T, digits = 2, escape = F, ) %>% 
-   kable_styling(latex_options = "striped", full_width = T, font_size = 12) %>% 
+   set_names("WP", "Role", "Coût de chaque Rôle (Euros/Jour)", "Jours (G.A.)") %>% 
+   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
+   kable_styling(latex_options = "striped", full_width = T, font_size = 14) %>% 
    row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid") %>% 
    collapse_rows(columns = 1, valign = "middle") 
-
 ```
+]
+
+.pull-right[
+```{r}
+Climatelabs.original %>% group_by(Role) %>% summarise(Days = sum(Jours.GA)) %>% 
+   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
+   kable_styling(latex_options = "striped", full_width = T, font_size = 20) 
+```
+
+]
 
 
 ---
@@ -90,9 +107,19 @@ Tabla.Sinchro <- Sincro
 Tabla.Sinchro[Tabla.Sinchro == 0] <- NA
 #Tabla.Sinchro %>% mutate_if(is.double, as.character) -> Tabla.Sinchro
 
-Tabla.Sinchro %>% 
-  kbl(booktabs = T) %>% 
-  kable_styling(latex_options = "striped", full_width = T, font_size = 9) %>% 
+
+#Tabla.Sinchro$WP %>% levels()
+Tabla.Sinchro$WP <- 
+   factor(Tabla.Sinchro$WP, 
+          levels = c("Preparation",
+                     "Development", 
+                     "Quality Plan",
+                     "Dissemination\nexploitation", 
+                     "Management"))
+
+Tabla.Sinchro %>% arrange(WP) %>% 
+  kbl(booktabs = T,  format = "html", table.attr='class="myTable"') %>% 
+  kable_styling(latex_options = "striped", full_width = T, font_size = 10 ) %>%
   collapse_rows(columns = 1:2, valign = "middle") 
 
 ```
@@ -101,6 +128,8 @@ Tabla.Sinchro %>%
 ---
 
 # Sinchro UL - ClimateLabs
+
+.pull-left[
 
 ```{r}
 Sincro.UL <- Sincro %>% group_by(WP, Role) %>% summarise(Sincro.UL = sum(Total))
@@ -118,18 +147,27 @@ Summary$WP <-
                      "Management"))
 
 
-Summary %>% 
+Summary %>% select(-Unit.cost) %>% 
    kbl(booktabs = T) %>% 
   kable_styling(latex_options = "striped", full_width = T, font_size = 9) %>% 
   collapse_rows(columns = 1:2, valign = "middle") 
 
+```
+]
 
-
+.pull-rigth[
+```{r}
+Summary %>% group_by(Role) %>% summarise(Days = sum(Jours.GA),
+                                         Days_UL = sum(Sincro.UL, na.rm = TRUE),
+                                         Days_to_declare = Days - Days_UL) %>% 
+   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
+   kable_styling(latex_options = "striped", full_width = T, font_size = 20) 
 ```
 
+]
 ---
 
-Graphique de Sincro:
+# Graph
 
 ```{r, out.width='90%', fig.width=7, fig.height=3}
 
