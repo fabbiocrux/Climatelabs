@@ -9,21 +9,29 @@
 # 
 # Tout <- read_excel(here("Sinchro/June-2021.xlsx")) 
 #Climatelabs <- read_excel(here("Sinchro/Janvier-2022.xlsx")) 
+
+# Sincro data
 Sincro2020 <- 
    read_excel(here("Sinchro/Export_multi_du_01_01_2020_au_31_12_2020.xlsx")) 
 Sincro2021 <- 
    read_excel(here("Sinchro/Export_multi_du_01_01_2021_au_31_12_2021.xlsx")) 
 Sincro2022 <- 
-   read_excel(here("Sinchro/Export_multi_du_01_01_2022_au_30_04_2022.xlsx")) 
+   read_excel(here("Sinchro/Export_multi_du_01_01_2022_au_31_08_2022.xlsx")) 
 
 Climatelabs <- rbind(Sincro2020, Sincro2021, Sincro2022)
 rm(Sincro2020, Sincro2021, Sincro2022)
+
+
+# Testing with Fabio
+# Climatelabs <-
+#    read_excel(here("Sinchro/FABIO-Export_multi_du_01_10_2021_au_30_09_2022.xlsx"))
+
 
 Climatelabs  <-  Climatelabs %>% select(-Service, -Nom, -"Unité d'export")
 Climatelabs <- Climatelabs %>% pivot_longer(!Prénom) %>% set_names("Prenom", "WP", "Jours")
 
 #Filtering only EC et Technicien
-Climatelabs  <- Climatelabs %>% filter(str_detect(WP, 'EC/Enseignant|Technicien|administratif'))
+Climatelabs  <- Climatelabs %>% filter(str_detect(WP, 'EC/Enseignant|Technicien|administratif|Manager'))
 names(Climatelabs)
 
 
