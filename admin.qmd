@@ -102,8 +102,6 @@ Tabla.Sinchro %>% arrange(WP) %>%
 
 # Sinchro UL - ClimateLabs
 
-
-
 ```{r}
 Sincro.UL <- Sincro %>% group_by(WP, Role) %>% summarise(Sincro.UL = sum(Total))
 # Joinning 
@@ -142,16 +140,28 @@ Summary %>% group_by(Role) %>% summarise(Days = sum(Jours.GA),
 
 # Graph
 
-```{r, out.width='90%', fig.width=7, fig.height=3}
+```{r, out.width='90%', fig.width=7, fig.height=8}
+
 
 Summary %>% select(-Unit.cost) %>% 
    pivot_longer(cols = Jours.GA:Sincro.UL,
                 names_to = "Type") %>% 
+   mutate( Type = factor(Type, 
+                    levels = c( "Sincro.UL", "Jours.GA"),
+                    labels = c("Sinchro UL", "Grant Agreement"))
+   ) %>% 
    ggplot(aes(x = WP, y = value, fill = Type))+
    geom_bar( stat = "Identity", position="dodge") +
+   scale_fill_manual(values=c(
+                             "grey",
+                             "black")) +
    #scale_y_continuous(limits = c(0, 50))  +
-   coord_flip() +
-   facet_grid(. ~ Role, scales = "free_x")
+   #coord_flip() +
+   facet_grid(Role ~ . , scales = "free_y")+
+   theme_minimal(base_size = 12, base_family = "Palatino")+
+   theme(legend.position = 'bottom')
+
+
 
 ```
 

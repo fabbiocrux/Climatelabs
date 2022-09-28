@@ -16,7 +16,7 @@ Sincro2020 <-
 Sincro2021 <- 
    read_excel(here("Sinchro/Export_multi_du_01_01_2021_au_31_12_2021.xlsx")) 
 Sincro2022 <- 
-   read_excel(here("Sinchro/Export_multi_du_01_01_2022_au_31_08_2022.xlsx")) 
+   read_excel(here("Sinchro/Export_multi_du_01_01_2022_au_30_09_2022.xlsx")) 
 
 Climatelabs <- rbind(Sincro2020, Sincro2021, Sincro2022)
 rm(Sincro2020, Sincro2021, Sincro2022)
