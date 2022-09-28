@@ -120,7 +120,7 @@ Summary$WP <-
 
 Summary %>% select(-Unit.cost) %>% 
    kbl(booktabs = T) %>% 
-  kable_styling(latex_options = "striped", full_width = T, font_size = 10) %>% 
+  kable_styling(latex_options = "striped", full_width = T, font_size = 17) %>% 
   collapse_rows(columns = 1:2, valign = "middle") 
 
 ```
@@ -132,7 +132,7 @@ Summary %>% group_by(Role) %>% summarise(Days = sum(Jours.GA),
                                          Days_UL = sum(Sincro.UL, na.rm = TRUE),
                                          Days_to_declare = Days - Days_UL) %>% 
    kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
-   kable_styling(latex_options = "striped", full_width = T, font_size = 20) 
+   kable_styling(latex_options = "striped", full_width = T, font_size = 17) 
 ```
 
 
@@ -142,13 +142,18 @@ Summary %>% group_by(Role) %>% summarise(Days = sum(Jours.GA),
 
 ```{r, out.width='90%', fig.width=7, fig.height=8}
 
-
 Summary %>% select(-Unit.cost) %>% 
    pivot_longer(cols = Jours.GA:Sincro.UL,
                 names_to = "Type") %>% 
-   mutate( Type = factor(Type, 
+   mutate( Role = factor(Role, 
+                    levels = c("Manager", "EC/Enseignant",
+                               "Administratif", "Technicien"),
+                    labels = c("Manager", "EC/Enseignant",
+                               "Administratif", "Technicien")),
+      Type = factor(Type, 
                     levels = c( "Sincro.UL", "Jours.GA"),
-                    labels = c("Sinchro UL", "Grant Agreement"))
+                    labels = c("Sinchro UL", "Grant Agreement")
+                    )
    ) %>% 
    ggplot(aes(x = WP, y = value, fill = Type))+
    geom_bar( stat = "Identity", position="dodge") +
