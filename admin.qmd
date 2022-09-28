@@ -120,7 +120,7 @@ Summary$WP <-
 
 Summary %>% select(-Unit.cost) %>% 
    kbl(booktabs = T) %>% 
-  kable_styling(latex_options = "striped", full_width = T, font_size = 9) %>% 
+  kable_styling(latex_options = "striped", full_width = T, font_size = 10) %>% 
   collapse_rows(columns = 1:2, valign = "middle") 
 
 ```
@@ -160,7 +160,6 @@ Summary %>% select(-Unit.cost) %>%
    facet_grid(Role ~ . , scales = "free_y")+
    theme_minimal(base_size = 12, base_family = "Palatino")+
    theme(legend.position = 'bottom')
-
 
 
 ```
