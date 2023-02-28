@@ -28,7 +28,7 @@ library(here)
 # Datos
 source("R/Climatelabs_original.R")
 source("R/1-Data-sincro.R")
-
+options(knitr.kable.NA = ' ')
 ```
 
 
@@ -164,7 +164,7 @@ Summary %>% select(-Unit.cost) %>%
    #coord_flip() +
    facet_grid(Role ~ . , scales = "free_y")+
    theme_minimal(base_size = 12, base_family = "Palatino")+
-   theme(legend.position = 'bottom')
+   theme(legend.position = 'right')
 
 
 ```
