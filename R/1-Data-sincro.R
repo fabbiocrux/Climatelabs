@@ -17,20 +17,43 @@ Sincro2021 <-
    read_excel(here("Sinchro/Export_multi_du_01_01_2021_au_31_12_2021.xlsx")) 
 Sincro2022 <- 
    read_excel(here("Sinchro/Export_multi_du_01_01_2022_au_31_12_2022.xlsx")) 
+Sincro2023 <- 
+   read_excel(here("Sinchro/Export_multi_du_01_01_2023_au_31_12_2023.xlsx")) 
 
-Climatelabs <- rbind(Sincro2020, Sincro2021, Sincro2022)
-rm(Sincro2020, Sincro2021, Sincro2022)
+# 
+# # Filtering data to obtain the values
+# filtering_climatelabs <- function(data){
+# 
+#    data_clean <-
+#       data %>% select(-Service, -Nom, -"Unité d'export") %>%
+#       pivot_longer(!Prénom) %>% set_names("Prenom", "WP", "Jours") %>%
+#       filter(Jours>0, str_detect(WP, 'EC/Enseignant|Technicien|administratif|Manager'))
+# 
+#    return(data_clean)
+# }
+# 
+# Sin2020 <- filtering_climatelabs(Sincro2020)
+# Sin2021 <- filtering_climatelabs(Sincro2021)
+# Sin2022 <- filtering_climatelabs(Sincro2022)
+# Sin2023 <- filtering_climatelabs(Sincro2023)
+# 
+# 
+# Method2 <- rbind(Sin2020, Sin2021, Sin2022, Sin2023)
+# Method2 <- Method2 %>% group_by(WP) %>% summarise(Jours = sum(Jours))
+# 
+# 
 
+# Deleting the excels
+Climatelabs <- rbind(Sincro2020, Sincro2021, Sincro2022, Sincro2023)
 
-# Testing with Fabio
-# Climatelabs <-
-#    read_excel(here("Sinchro/FABIO-Export_multi_du_01_10_2021_au_30_09_2022.xlsx"))
+rm(Sincro2020, Sincro2021, Sincro2022, Sincro2023)
 
-
+# Creating the 
 Climatelabs  <-  Climatelabs %>% select(-Service, -Nom, -"Unité d'export")
 Climatelabs <- Climatelabs %>% pivot_longer(!Prénom) %>% set_names("Prenom", "WP", "Jours")
 
 #Filtering only EC et Technicien
+#test <- Climatelabs %>% filter(str_detect(WP, 'EC/Enseignant|Technicien|administratif|Manager'))
 Climatelabs  <- Climatelabs %>% filter(str_detect(WP, 'EC/Enseignant|Technicien|administratif|Manager'))
 names(Climatelabs)
 

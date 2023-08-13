@@ -1,22 +1,25 @@
 ---
-title: "Sincro"
-format:
-  html:
-    toc: true
-    theme: litera
-    anchor-sections: true
-    smooth-scroll: true
-    link-external-icon: true
-    link-external-newwindow: true
-    self-contained: true
-execute:
-  echo: false
-  warning: false
+title: "Climatelabs"
+subtitle: "Université de Lorraine"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+#      bg: "white"
+#      fg: "#FDF7F7" 
+#      primary: "#ED79F9"
+      base_font:
+        google: Prompt
+      code_font:
+        google: JetBrains Mono
+    orientation: rows
+    #vertical_layout: fill
 ---
 
-```{r}
-#| include: false
-#| 
+```{r setup, include=FALSE}
+
+# Install thematic and un-comment for themed static plots (i.e., ggplot2)
+# thematic::thematic_rmd()
+
 library(flexdashboard)
 source("R/Climatelabs_original.R")
 source("R/1-Data-sincro.R")
@@ -24,24 +27,29 @@ options(knitr.kable.NA = ' ')
 
 ```
 
+# Grant Agreement {.tabset}
 
-# Objectif:
+### Gantt of the Project
 
-> Cette présentation fait un anlyse Globala Sinchro pour le Projet Climatelabs
-
-
-# Gantt Original de Climatelabs
-
-```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
+```{r Gantt, include=TRUE, fig.retina=3, out.width='90%'}
 Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
 #image_scale(, "2000")
 Gannt
 ```
 
----
 
+### Sincro Initial according Grant Agreement (G.A)
 
-# Sincro Initial
+```{r, }
+Climatelabs.original %>% 
+   select(WP, Role, Unit.cost, Jours.GA) %>% 
+   set_names("WP", "Role", "Coût de chaque Rôle (Euros/Jour)", "Jours (G.A.)") %>% 
+   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
+   kable_styling(latex_options = "striped", full_width = T, font_size = 14) %>% 
+   row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid") %>% 
+   collapse_rows(columns = 1, valign = "middle") 
+```
+
 
 
 ```{r,}
@@ -55,7 +63,8 @@ Climatelabs.original %>%
 ```
 
 
-# Total of days
+    
+### Total of days
 
 ```{r}
 Climatelabs.original %>% group_by(Role) %>% summarise(Days = sum(Jours.GA)) %>% 
@@ -63,10 +72,10 @@ Climatelabs.original %>% group_by(Role) %>% summarise(Days = sum(Jours.GA)) %>%
    kable_styling(latex_options = "striped", full_width = T, font_size = 14) 
 ```
 
----
 
+# UL {.tabset}
 
-# UL Sinchro: Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`
+### Implication Personnel UL : Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`
 
 ```{r, include=TRUE}
 Tabla.Sinchro <- Sincro
@@ -91,9 +100,7 @@ Tabla.Sinchro %>% arrange(WP) %>%
 ```
 
 
----
-
-# Sinchro UL - ClimateLabs
+### Sinchro UL - ClimateLabs
 
 ```{r}
 Sincro.UL <- Sincro %>% group_by(WP, Role) %>% summarise(Sincro.UL = sum(Total))
@@ -118,20 +125,8 @@ Summary %>% select(-Unit.cost) %>%
 
 ```
 
+### Graphh
 
-
-```{r}
-Summary %>% group_by(Role) %>% summarise(Days = sum(Jours.GA),
-                                         Days_UL = sum(Sincro.UL, na.rm = TRUE),
-                                         Days_to_declare = Days - Days_UL) %>% 
-   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
-   kable_styling(latex_options = "striped", full_width = T, font_size = 17) 
-```
-
-
----
-
-# Graph
 
 ```{r, out.width='90%', fig.width=7, fig.height=8}
 

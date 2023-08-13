@@ -1,4 +1,12 @@
 
+library(magick)
+library(tidyverse)
+library(readxl)
+library(reshape2)
+library(kableExtra)
+library(here)
+
+
 # Cost Erasmus+
 Manager =  280
 EC =  214
