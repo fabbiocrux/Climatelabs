@@ -1,14 +1,23 @@
 ---
-title: "Sincro"
+title: "Analyse de Sinchro"
+subtitle: "Projet Erasmus+ Climatelabs | 2020 - 2023"
 format:
-  html:
-    toc: true
-    theme: litera
-    anchor-sections: true
-    smooth-scroll: true
-    link-external-icon: true
-    link-external-newwindow: true
-    self-contained: true
+  pdf:
+   documentclass: article
+   classoption: [onecolumn]
+   number-sections: true
+   geometry: [left=2cm,top=2.5cm,right=2cm,bottom=2cm]
+   papersize: a4paper
+   include-in-header: [assets/latex.tex]
+#   html:
+#     toc: true
+#     theme: litera
+#     anchor-sections: true
+#     smooth-scroll: true
+#     link-external-icon: true
+#     link-external-newwindow: true
+#     self-contained: true
+prefer-html: true
 execute:
   echo: false
   warning: false
@@ -24,13 +33,14 @@ options(knitr.kable.NA = ' ')
 
 ```
 
+\thispagestyle{fancy}
 
 # Objectif:
 
-> Cette présentation fait un anlyse Globala Sinchro pour le Projet Climatelabs
+> Cette document est une anlyse globale de l'outil Sinchro pour le Projet Climatelabs piloté au sein de l'ENSGSI
 
-
-# Gantt Original de Climatelabs
+## Temps estimé selon le Grant Agreement du projet
+### Gantt Original de Climatelabs
 
 ```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
 Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
@@ -38,11 +48,7 @@ Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
 Gannt
 ```
 
----
-
-
-# Sincro Initial
-
+### Quantité de jours per WP initial
 
 ```{r,}
 Climatelabs.original %>% 
