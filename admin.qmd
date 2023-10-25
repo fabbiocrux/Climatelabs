@@ -9,6 +9,7 @@ format:
    geometry: [left=2cm,top=2.5cm,right=2cm,bottom=2cm]
    papersize: a4paper
    include-in-header: [assets/latex.tex]
+   keep-tex: true
 #   html:
 #     toc: true
 #     theme: litera
@@ -21,12 +22,12 @@ prefer-html: true
 execute:
   echo: false
   warning: false
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
 #| include: false
-#| 
-library(flexdashboard)
 source("R/Climatelabs_original.R")
 source("R/1-Data-sincro.R")
 options(knitr.kable.NA = ' ')
@@ -35,143 +36,177 @@ options(knitr.kable.NA = ' ')
 
 \thispagestyle{fancy}
 
-# Objectif:
+**Objectif:**
 
 > Cette document est une anlyse globale de l'outil Sinchro pour le Projet Climatelabs piloté au sein de l'ENSGSI
 
-## Temps estimé selon le Grant Agreement du projet
-### Gantt Original de Climatelabs
-
-```{r Gantt, include=TRUE, fig.retina=3, out.width='100%'}
-Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
-#image_scale(, "2000")
-Gannt
-```
-
-### Quantité de jours per WP initial
+# Temps estimé selon le Grant Agreement du projet
+## Quantité de jours per WP initial
 
 ```{r,}
 Climatelabs.original %>% 
    select(WP, Role, Unit.cost, Jours.GA) %>% 
-   set_names("WP", "Role", "Coût de chaque Rôle (Euros/Jour)", "Jours (G.A.)") %>% 
-   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
-   kable_styling(latex_options = "striped", full_width = T, font_size = 14) %>% 
-   row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid") %>% 
-   collapse_rows(columns = 1, valign = "middle") 
+   mutate(WP = factor(WP)) %>%
+   set_names("WP", "Role", "Coût (Euros/Jour)", "Jours (G.A.)") %>% 
+   kbl(booktabs = T, digits = 2, escape = F) %>% 
+   kable_styling(latex_options = c("hold_position"), full_width = F, font_size = 10) %>% 
+   collapse_rows(columns = 1, latex_hline = "major", valign = "middle") 
+   #%>% row_spec( c(4, 8, 12, 16), extra_css = "border-bottom: 1px solid")
+
 ```
 
 
-# Total of days
+## Quantité totale de Jours par Rôle dans le projet selon Grant Agreement
 
 ```{r}
-Climatelabs.original %>% group_by(Role) %>% summarise(Days = sum(Jours.GA)) %>% 
-   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
-   kable_styling(latex_options = "striped", full_width = T, font_size = 14) 
+Climatelabs.original %>% mutate(Role= factor(Role, 
+          levels = c("Manager", "EC/Enseignant", "Technicien", "Administratif"))) %>% 
+   group_by(Role) %>% summarise(Jours = sum(Jours.GA)) %>% 
+   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, ) %>% 
+   kable_styling(latex_options = c("striped", "hold_position") , full_width = F, font_size = 10) 
 ```
 
----
 
 
-# UL Sinchro: Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`
+# UL Sinchro: Janvier 2020 -  Août 2023
 
-```{r, include=TRUE}
+Dans le tableau suivante, on identifie la quantité de jours par participant et par tâche identifié sur Sinchro.
+
+
+```{r}
 Tabla.Sinchro <- Sincro
 Tabla.Sinchro[Tabla.Sinchro == 0] <- NA
 #Tabla.Sinchro %>% mutate_if(is.double, as.character) -> Tabla.Sinchro
 
 
 #Tabla.Sinchro$WP %>% levels()
-Tabla.Sinchro$WP <- 
-   factor(Tabla.Sinchro$WP, 
-          levels = c("Preparation",
-                     "Development", 
-                     "Quality Plan",
-                     "Dissemination\nexploitation", 
-                     "Management"))
+# Tabla.Sinchro$WP <- 
+#    factor(Tabla.Sinchro$WP, 
+#           levels = c("Preparation",
+#                      "Development", 
+#                      "Quality Plan",
+#                      "Dissemination and Exploitation", 
+#                      "Management"))
 
-Tabla.Sinchro %>% arrange(WP) %>% 
-  kbl(booktabs = T,  format = "html", table.attr='class="myTable"') %>% 
-  kable_styling(latex_options = "striped", full_width = T, font_size = 10 ) %>%
-  collapse_rows(columns = 1:2, valign = "middle") 
+Tabla.Sinchro %>% arrange(WP) %>%
+  kbl(booktabs = T) %>%
+  kable_styling(latex_options =  c("HOLD_position", "scale_down")) %>% 
+   collapse_rows(columns = 1, valign = "middle") %>% 
+   column_spec(10, bold = T, color = "black", border_left = T)
+  # column_spec(1, width = c("2cm")) , full_width = F, font_size = 8 
+#%>% 
 
 ```
 
 
----
 
-# Sinchro UL - ClimateLabs
+
+
+## Jours déclares en Sinchro pour le projet ClimateLabs
 
 ```{r}
 Sincro.UL <- Sincro %>% group_by(WP, Role) %>% summarise(Sincro.UL = sum(Total))
-# Joinning 
-Summary <- 
-   Climatelabs.original %>% left_join(Sincro.UL, by=c("WP", "Role")) %>% 
-   select(WP:Unit.cost, Sincro.UL)
 
-Summary$WP <- 
-   factor(Summary$WP, 
-          levels = c("Preparation",
-                     "Development", 
-                     "Quality Plan",
-                     "Dissemination\nexploitation", 
-                     "Management"))
-
-
-Summary %>% select(-Unit.cost) %>% 
-   kbl(booktabs = T) %>% 
-  kable_styling(latex_options = "striped", full_width = T, font_size = 17) %>% 
-  collapse_rows(columns = 1:2, valign = "middle") 
+Sincro.UL %>% arrange(WP) %>% 
+kbl(booktabs = T) %>% 
+  kable_styling(latex_options = c("striped", "HOLD_position"), full_width = F, font_size = 10) %>% 
+  collapse_rows(columns = 1, valign = "middle") 
 
 ```
 
 
+
+
+## Differences entre Jours de GA et Jours declarés sur Sinchro
 
 ```{r}
-Summary %>% group_by(Role) %>% summarise(Days = sum(Jours.GA),
-                                         Days_UL = sum(Sincro.UL, na.rm = TRUE),
-                                         Days_to_declare = Days - Days_UL) %>% 
-   kbl(booktabs = T, digits = 2, escape = F,   padding = 0, format = "html", table.attr='class="myTable"' ) %>% 
-   kable_styling(latex_options = "striped", full_width = T, font_size = 17) 
+# Joinning 
+Summary <-
+   Climatelabs.original %>% select(WP, Role, Jours.GA) %>%
+   mutate(Role= factor(Role, 
+          levels = c("Manager", "EC/Enseignant", "Technicien", "Administratif"),
+          labels = c("Man", "EC", "Tech", "Admin"))
+   ) %>% 
+   left_join(Sincro.UL, by=c("WP", "Role")) %>%
+   mutate(Difference = Sincro.UL- Jours.GA )
+
+
+#Summary$Difference = cell_spec(Summary$Difference, color = ifelse(Summary$Difference > 0, "green", "black"))
+
+Summary %>% 
+  kbl(booktabs = T) %>%
+  kable_styling(latex_options = c("striped", "HOLD_position"), full_width = F ) %>% 
+  column_spec(5, bold = T, color = "black", border_left = T) %>% 
+  collapse_rows(columns = 1, valign = "middle")
+
 ```
 
 
----
+## Differences totale entre Jours du GA et Jours declarés sur Sinchro par Rôle
 
-# Graph
+Le tableau montre les jours additionels que l'UL a travaillé dans le projet comme co-financement avec des ressources propres.
 
-```{r, out.width='90%', fig.width=7, fig.height=8}
+```{r}
+Summary %>% group_by(Role) %>% summarise("Jours GA" = sum(Jours.GA),
+                                         "Jours UL Sinchro" = sum(Sincro.UL, na.rm = TRUE),
+                                         Difference = `Jours UL Sinchro` - `Jours GA` ) %>% 
+   kbl(booktabs = T, digits = 2, escape = F, ) %>% 
+   kable_styling(latex_options = c("striped", "HOLD_position"), full_width = F, font_size = 10) %>% 
+   column_spec(4, bold = T, color = "black", border_left = T)
 
-Summary %>% select(-Unit.cost) %>% 
+```
+
+
+
+## Graphique des distribution des jours dans le projet
+
+```{r, out.width='90%', fig.width=9, fig.height=12}
+
+Summary %>% 
    pivot_longer(cols = Jours.GA:Sincro.UL,
                 names_to = "Type") %>% 
    mutate( Role = factor(Role, 
-                    levels = c("Manager", "EC/Enseignant",
-                               "Administratif", "Technicien"),
-                    labels = c("Manager", "EC/Enseignant",
-                               "Administratif", "Technicien")),
+                    levels = c("Man", "EC", "Tech", "Admin"),
+                    labels = c("Manager", "EC/Enseignant", "Technicien", "Administratif")),
       Type = factor(Type, 
                     levels = c( "Sincro.UL", "Jours.GA"),
-                    labels = c("Sinchro UL", "Grant Agreement")
+                    labels = c("Sinchro UL", "Jours Grant Agreement")
                     )
    ) %>% 
    ggplot(aes(x = WP, y = value, fill = Type))+
    geom_bar( stat = "Identity", position="dodge") +
-   scale_fill_manual(values=c(
-                             "grey",
-                             "black")) +
+   # scale_fill_manual(values=c(
+   #                           "grey",
+   #                           "blue")) +
    #scale_y_continuous(limits = c(0, 50))  +
    #coord_flip() +
-   facet_grid(Role ~ . , scales = "free_y") +
+   facet_grid(Role ~ . ) +
    geom_text(
     aes(label = value),
-    colour = "white", size = 3,
-    vjust = 1, position = position_dodge(.9)
+    colour = "black", size = 3,
+    vjust = -1, position = position_dodge(.9)
   ) + 
+   labs(x="Working Packages",
+        y= "Jours",
+        fill = "Jours GA et Sinchro") +
    theme_minimal(base_size = 12, base_family = "Palatino")+
-   theme(legend.position = 'right')
+   theme(legend.position = 'top')
 
 
 ```
 
 
-Sinchro: Janvier 2020 - `r format(Sys.time(), "%b %d %Y")`
+
+
+
+### Gantt Original de Climatelabs
+
+```{r Gantt, include=false, fig.retina=3, out.width='100%', eval=FALSE}
+Gannt <- image_read_pdf('Planning/planning.pdf', density = 200)
+#image_scale(, "2000")
+Gannt
+```
+
+
+
+

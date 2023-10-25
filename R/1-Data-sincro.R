@@ -89,15 +89,18 @@ Sincro <-
    select(-Project)
 
 # ORdering factors
-Sincro$WP <- gsub('&', "\n", Sincro$WP)
+#Sincro$WP <- gsub('&', "\n", Sincro$WP)
 Sincro$WP <- 
    factor(Sincro$WP, 
-          levels = c("Preparation", "Development", "Quality Plan", "Dissemination\nexploitation", "Management"))
+          levels = c("Preparation", "Development", "Quality Plan", "Dissemination&exploitation", "Management"),
+          labels = c("Preparation", "Development", "Quality Plan", "Dissemination and Exploitation", "Management"))
 
 # Changing the levels
 Sincro$Role <- 
-   factor(Sincro$Role, levels = c("Manager", "EC/Enseignant", "Technicien", "administratif"))
-levels(Sincro$Role)[levels(Sincro$Role)=="administratif"] <- "Administratif"
+   factor(Sincro$Role, 
+          levels = c("Manager", "EC/Enseignant", "Technicien", "administratif"),
+          labels = c("Man", "EC", "Tech", "admin"))
+levels(Sincro$Role)[levels(Sincro$Role)=="admin"] <- "Admin"
 
 
 # TAble ------
